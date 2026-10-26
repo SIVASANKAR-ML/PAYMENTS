@@ -1,25 +1,9 @@
 app_name = "trie_payments"
 app_title = "Trie Payments"
-app_publisher = "siva"
-app_description = "test"
-app_email = "siva@gmail.com"
-app_license = "mit"
-
-# Apps
-# ------------------
-
-# required_apps = []
-
-# Each item in the list will be shown as an app in the apps page
-# add_to_apps_screen = [
-# 	{
-# 		"name": "trie_payments",
-# 		"logo": "/assets/trie_payments/logo.png",
-# 		"title": "Trie Payments",
-# 		"route": "/trie_payments",
-# 		"has_permission": "trie_payments.api.permission.has_app_permission"
-# 	}
-# ]
+app_publisher = "Tridz"
+app_description = "The Trie Payment App offers secure, instant payments and expense tracking with a user-friendly interface, making financial management simple and efficient."
+app_email = "trie@gmail.com"
+app_license = "MIT"
 
 # Includes in <head>
 # ------------------
@@ -47,11 +31,6 @@ app_license = "mit"
 # doctype_list_js = {"doctype" : "public/js/doctype_list.js"}
 # doctype_tree_js = {"doctype" : "public/js/doctype_tree.js"}
 # doctype_calendar_js = {"doctype" : "public/js/doctype_calendar.js"}
-
-# Svg Icons
-# ------------------
-# include app icons in desk
-# app_include_icons = "trie_payments/public/icons.svg"
 
 # Home Pages
 # ----------
@@ -125,6 +104,8 @@ app_license = "mit"
 # 	"Event": "frappe.desk.doctype.event.event.has_permission",
 # }
 
+fixtures = ["Custom Field","Client Script"]
+
 # DocType Class
 # ---------------
 # Override standard doctype classes
@@ -137,13 +118,11 @@ app_license = "mit"
 # ---------------
 # Hook on document methods and events
 
-# doc_events = {
-# 	"*": {
-# 		"on_update": "method",
-# 		"on_cancel": "method",
-# 		"on_trash": "method"
-# 	}
-# }
+doc_events = {
+    "Subscription Action" : {
+        "validate" : "trie_payments.hook_functions.unpaid_subscription",
+	}
+}
 
 # Scheduled Tasks
 # ---------------
@@ -234,16 +213,3 @@ app_license = "mit"
 # auth_hooks = [
 # 	"trie_payments.auth.validate"
 # ]
-
-# Automatically update python controller files with type annotations for this app.
-# export_python_type_annotations = True
-
-# default_log_clearing_doctypes = {
-# 	"Logging DocType Name": 30  # days to retain logs
-# }
-
-# Translation
-# ------------
-# List of apps whose translatable strings should be excluded from this app's translations.
-# ignore_translatable_strings_from = []
-

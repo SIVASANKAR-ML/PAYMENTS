@@ -1,0 +1,103 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "creation": "2024-05-29 10:37:38.619018",
+ "default_view": "List",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "whatsapp_id",
+  "first_name",
+  "last_name",
+  "column_break_podyy",
+  "package",
+  "vehicle_and_venue_details_section",
+  "vehicle_details_and_venue",
+  "service_details_section",
+  "service_status",
+  "whatsapp_user_details"
+ ],
+ "fields": [
+  {
+   "fetch_from": "whatsapp_user_details.whatsapp_id",
+   "fieldname": "whatsapp_id",
+   "fieldtype": "Data",
+   "label": "WhatsApp Id"
+  },
+  {
+   "fieldname": "first_name",
+   "fieldtype": "Data",
+   "label": "First Name"
+  },
+  {
+   "fieldname": "last_name",
+   "fieldtype": "Data",
+   "label": "Last Name"
+  },
+  {
+   "fieldname": "column_break_podyy",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "package",
+   "fieldtype": "Link",
+   "label": "Package",
+   "options": "Subscription Plan"
+  },
+  {
+   "fieldname": "vehicle_and_venue_details_section",
+   "fieldtype": "Section Break",
+   "label": "Vehicle And Venue Details"
+  },
+  {
+   "fieldname": "vehicle_details_and_venue",
+   "fieldtype": "Table",
+   "label": "Vehicle Details And Venue",
+   "options": "Vehicle Details And Venue"
+  },
+  {
+   "fieldname": "service_details_section",
+   "fieldtype": "Section Break",
+   "label": "Service Details"
+  },
+  {
+   "default": "Initiated",
+   "fieldname": "service_status",
+   "fieldtype": "Select",
+   "label": "Service Status",
+   "options": "\nInitiated\nPending\nCompleted"
+  },
+  {
+   "fieldname": "whatsapp_user_details",
+   "fieldtype": "Link",
+   "label": "WhatsApp User Details",
+   "options": "WhatsApp User Details"
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "links": [],
+ "modified": "2024-06-19 20:10:35.821431",
+ "modified_by": "Administrator",
+ "module": "Trie Payments",
+ "name": "QuickWash Customer Service Record",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": [],
+ "track_changes": 1
+}

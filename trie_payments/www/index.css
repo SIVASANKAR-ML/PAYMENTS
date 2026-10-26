@@ -1,0 +1,137 @@
+* {
+    margin: 0;
+}
+
+body{
+    line-height: 1.5;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background-color:#191919
+}
+.card {
+    background-color: #25282E;
+    color:white;
+    position: relative;
+    padding:3rem 2rem 2rem 2rem;
+    border-radius: 16px;
+}
+
+.icon {
+    position: absolute;
+    top: -50px;
+    left: 50%;
+    transform: translateX(-50%);
+    height:120px;
+}
+
+.payment-title{
+    font-size:1.5rem;
+    text-align: center;
+}
+
+.payment-subtitle{
+    font-size:0.8rem;
+    text-align: center;
+    opacity: 0.7;
+}
+
+.horizontal-line {
+    border: none;
+    border-top: 2px solid rgba(255, 255, 255, 0.16);
+    margin:1rem 0;
+    width: 100%; 
+}
+
+.amount {
+    text-align: center;
+    font-size: 1.8rem;
+}
+
+.card-container {
+    margin-top: 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;    
+    width: 100%;
+}
+
+.details-card {
+    border: 1px solid rgba(255, 255, 255, 0.16);
+    padding:0.5rem;
+    border-radius:6px;
+    font-size:0.8rem;
+}
+
+.details-title {
+    opacity: 0.7;
+}
+
+.poppins-regular {
+font-family: "Poppins", sans-serif;
+font-weight: 400;
+font-style: normal;
+}
+
+.poppins-medium {
+font-family: "Poppins", sans-serif;
+font-weight: 500;
+font-style: normal;
+}
+
+.poppins-semibold {
+font-family: "Poppins", sans-serif;
+font-weight: 600;
+font-style: normal;
+}
+
+.skeleton {
+    margin-inline: auto;
+    background-color: #a5a5a5;
+    animation: skeleton-animation 1s infinite ease-in-out;
+}
+
+.amount-skeleton {
+    height:1.8rem;
+    width:50%;
+}
+
+.details-skeleton {
+    height:1.5rem;
+    width:100%;
+}
+
+.whatsapp-btn {
+    display:flex;
+    justify-content: center;
+    align-items: center;
+    font-size: small;
+    color: white;
+    background-color: #25d366;
+    padding:0.5rem;
+    border-radius:6px;
+    font-weight: 600;
+    border:none;
+    text-decoration: none;
+}
+
+.close-icon{
+    position: absolute;
+    top:4%;
+    right:2rem;
+}
+
+@keyframes skeleton-animation {
+0% {
+    opacity: 0.2;
+}
+
+50% {
+    opacity: 0.5;
+}
+
+100% {
+    opacity: 0.2;
+}
+}

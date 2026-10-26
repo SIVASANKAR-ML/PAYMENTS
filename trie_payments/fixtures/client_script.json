@@ -1,0 +1,101 @@
+[
+ {
+  "docstatus": 0,
+  "doctype": "Client Script",
+  "dt": "Subscription Action",
+  "enabled": 0,
+  "modified": "2024-06-06 11:32:19.993632",
+  "module": null,
+  "name": "Subscription Action",
+  "script": "frappe.ui.form.on('Subscription Action', {\n\tafter_save: function(frm) {\n        if (frm.doc.action_type === 'Pause') {\n            console.log(\"haiiiiiiii\")\n            frappe.model.set_value('Subscription', frm.doc.subscription_id, 'custom_subscription_status', 'Paused');\n        } else if (frm.doc.action_type === 'Resume') {\n            frappe.model.set_value('Subscription', frm.doc.subscription_id, 'custom_subscription_status', 'Active');\n        }\n    }\n})",
+  "view": "Form"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Client Script",
+  "dt": "Subscription",
+  "enabled": 0,
+  "modified": "2024-06-10 18:27:32.228081",
+  "module": null,
+  "name": "Fetching Services List",
+  "script": "frappe.ui.form.on('Subscription', {\n    refresh: function(frm) {\n        frm.set_df_property('status', 'read_only', 1);\n    },\n    // custom_subscription_status: function(frm) {\n    //     if (frm.doc.custom_subscription_status === 'Paused') {\n    //         console.log(\"hai\")\n    //         frm.set_value('status', 'Paused');\n    //     } else if (frm.doc.custom_subscription_status === 'Resumed') {\n    //         frm.set_value('status', 'Active');\n    //     } else {\n    //         frm.set_value('status', frm.doc.custom_subscription_status);\n    //     }\n    // }\n});\n\n\n// frappe.ui.form.on('Subscription', {\n//     onload: function(frm, cdt, cdn) {\n//         const plans = frm.doc.plans;\n//         const planValues = plans.map(plan => plan.plan);\n//         console.log(planValues);\n//         frappe.call({\n//             method: 'trie_crm.triecrm_functions.get_services_data',\n//             args: {\n//                 plans_list: planValues\n//             },\n//             callback: function(r) {\n//                 // Clear existing rows in the \"Services\" child table\n//                 frm.clear_table(\"custom_service\");\n\n//                 if (r.message && r.message.length > 0) {\n//                     r.message.forEach(service => {\n//                         // console.log(service);\n//                         var child = frm.add_child(\"custom_service\");\n//                         frappe.model.set_value(child.doctype, child.name, \"services\", service.services);\n//                         frappe.model.set_value(child.doctype, child.name, \"qty\", service.qty);\n//                     });\n//                 }\n\n//                 // Refresh the form to display the updated child table\n//                 frm.refresh_field(\"Services\");\n//             }\n//         });\n//     }\n// });",
+  "view": "Form"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Client Script",
+  "dt": "Sales Invoice",
+  "enabled": 0,
+  "modified": "2024-06-27 11:28:01.064084",
+  "module": null,
+  "name": "Car Wash Service",
+  "script": "frappe.ui.form.on('Sales Invoice', {\n    before_submit: function(frm) {\n        if (frm.doc.subscription) {\n            console.log(frm.doc.subscription)\n            frappe.call({\n                method: 'trie_crm.trie_crm.doctype.service_job.service_job.create_service_jobs_for_subscription',\n                args: {\n                    subscription: frm.doc.subscription\n                },\n                callback: function(r) {\n                    if (r.message) {\n                        frappe.show_alert({message: __('Service jobs created successfully'), indicator: 'green'});\n                    }\n                }\n            });\n        }\n    }\n});",
+  "view": "Form"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Client Script",
+  "dt": "Customer",
+  "enabled": 0,
+  "modified": "2024-07-22 12:44:36.543278",
+  "module": null,
+  "name": "Customer Field Validation",
+  "script": "function validateField(frm, fieldName, errorMessage) {\n    if (!frm.doc[fieldName]) {\n        frappe.throw(__(errorMessage));\n    }\n}\n\nfunction validateChildTable(frm, tableName, requiredFields) {\n    let table = frm.doc[tableName];\n    if (!table || table.length === 0) {\n        frappe.throw(__(`${tableName.replace(/_/g, ' ')} is empty. Please add at least one entry.`));\n    }\n\n    for (let row of table) {\n        for (let field of requiredFields) {\n            if (!row[field.name]) {\n                frappe.throw(__(`${field.label} is required in ${tableName.replace(/_/g, ' ')}.`));\n            }\n        }\n    }\n}\n\nfrappe.ui.form.on('Customer', {\n    validate: function(frm) {\n        // Validate main fields\n        validateField(frm, 'customer_name', 'Customer Name is required');\n        validateField(frm, 'custom_mobile_number', 'Customer Mobile Number is required');\n\n        // Validate Vehicle Details And Venue table\n        validateChildTable(frm, 'custom_vehicle_information', [\n            {name: 'registration_number', label: 'Registration Number'},\n            {name: 'brand_and_model', label: 'Brand And Model'},\n            {name: 'site_name', label: 'Site Name'},\n            {name: 'building_number', label: 'Building Number'},\n            {name: 'bay_name', label: 'Bay Name'},\n            {name: 'parking_level_number', label: 'Parking Level Number'},\n            {name: 'parking_lot_number', label: 'Parking Lot Number'}\n        ]);\n    }\n});",
+  "view": "Form"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Client Script",
+  "dt": "Subscription",
+  "enabled": 0,
+  "modified": "2024-07-22 12:49:05.646579",
+  "module": null,
+  "name": "Get Customer Vehicle Details",
+  "script": "frappe.ui.form.on('Subscription', {\n    party: function(frm, cdt, cdn) {\n        var customer = frm.doc.party;\n        frappe.call({\n            method: 'trie_crm.triecrm_functions.custom_vehicle_information',\n            args: {\n                customer: customer\n            },\n            callback: function(r) {\n                // Clear existing rows in the \"Services\" child table\n                frm.clear_table(\"custom_vehicle_information\");\n\n                if (r.message && r.message.length > 0) {\n                    r.message.forEach(vehilce_details => {\n                        var child = frm.add_child(\"custom_vehicle_information\");\n                        frappe.model.set_value(child.doctype, child.name, \"car_type\", vehilce_details.car_type);\n                        frappe.model.set_value(child.doctype, child.name, \"brand_and_model\", vehilce_details.brand_and_model);\n                        frappe.model.set_value(child.doctype, child.name, \"parking_level_number\", vehilce_details.parking_level_number);\n                        frappe.model.set_value(child.doctype, child.name, \"registration_number\", vehilce_details.registration_number);\n                        frappe.model.set_value(child.doctype, child.name, \"car_color\", vehilce_details.car_color);\n                        frappe.model.set_value(child.doctype, child.name, \"parking_lot_number\", vehilce_details.parking_lot_number);\n                        frappe.model.set_value(child.doctype, child.name, \"bay_name\", vehilce_details.bay_name);\n                        frappe.model.set_value(child.doctype, child.name, \"site_name\", vehilce_details.site_name);\n                        frappe.model.set_value(child.doctype, child.name, \"building_number\", vehilce_details.building_number);\n                        frappe.model.set_value(child.doctype, child.name, \"flat_number\", vehilce_details.flat_number);\n                    });\n                }\n\n                // Refresh the form to display the updated child table\n                frm.refresh_field(\"custom_vehicle_information\");\n            }\n        });\n    }\n});\n\n\n\nfrappe.ui.form.on('Subscription Plan Detail', {\n\tplan:function(frm, cdt, cdn) {\n\t\tlet d=locals[cdt][cdn];\n\t\tplan_name=d.plan\n\t\tfrappe.call({\n            method: 'trie_crm.triecrm_functions.update_subscription_service_and_day_table',\n            args: {\n                plan_name: plan_name,\n                registration_number:frm.doc.custom_vehicle_information\n            },\n\t\t\n\t\tcallback: function(r) {\n    \t\tif (r.message) {\n                // Update plans\n                r.message.plans.forEach(plan => {\n                    let existingRow = frm.doc.plans.find(p => p.plan === plan.plan);\n                    if (existingRow) {\n                        frappe.model.set_value(existingRow.doctype, existingRow.name, \"custom_package_service_per_week\", plan.qty);\n                    } else {\n                        let newRow = frm.add_child(\"plans\");\n                        frappe.model.set_value(newRow.doctype, newRow.name, \"plan\", plan.plan);\n                        frappe.model.set_value(newRow.doctype, newRow.name, \"custom_package_service_per_week\", plan.qty);\n                    }\n                });\n                frm.refresh_field(\"plans\");\n    \n                // Update custom_subscription_day_and_time\n                frm.clear_table(\"custom_subscription_day_and_time\");\n                r.message.custom_subscription_day_and_time.forEach(item => {\n                    let row = frm.add_child(\"custom_subscription_day_and_time\");\n                    if (item.vehicle_number) {\n                        frappe.model.set_value(row.doctype, row.name, \"vehicle_number\", item.vehicle_number);\n                    }\n                    frappe.model.set_value(row.doctype, row.name, \"day\", item.day);\n                });\n                frm.refresh_field(\"custom_subscription_day_and_time\");\n    \n                // Update custom_vehicle_service\n                frm.clear_table(\"custom_vehicle_service\");\n                r.message.custom_vehicle_service.forEach(item => {\n                    let row = frm.add_child(\"custom_vehicle_service\");\n                    frappe.model.set_value(row.doctype, row.name, \"vehicle_number\", item.vehicle_number);\n                    frappe.model.set_value(row.doctype, row.name, \"service\", item.service);\n                    frappe.model.set_value(row.doctype, row.name, \"qty\", item.qty);\n                });\n                frm.refresh_field(\"custom_vehicle_service\");\n            }\n\t\t}\n\t\t})\n\t\t\n\t}\n})",
+  "view": "Form"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Client Script",
+  "dt": "Subscription Plan",
+  "enabled": 0,
+  "modified": "2024-07-22 12:24:01.260217",
+  "module": null,
+  "name": "Get Service Data",
+  "script": "frappe.ui.form.on('Subscription Plan', {\n    item: function(frm, cdt, cdn) {\n        var item_code = frm.doc.item;\n        frappe.call({\n            method: 'trie_crm.triecrm_functions.get_services_data',\n            args: {\n                item_code: item_code\n            },\n            callback: function(r) {\n                // Clear existing rows in the \"Services\" child table\n                frm.clear_table(\"custom_service\");\n\n                if (r.message && r.message.length > 0) {\n                    r.message.forEach(service => {\n                        // console.log(service);\n                        var child = frm.add_child(\"custom_service\");\n                        frappe.model.set_value(child.doctype, child.name, \"services\", service.services);\n                        frappe.model.set_value(child.doctype, child.name, \"qty\", service.qty);\n                    });\n                }\n\n                // Refresh the form to display the updated child table\n                frm.refresh_field(\"Services\");\n            }\n        });\n    }\n});",
+  "view": "Form"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Client Script",
+  "dt": "Subscription",
+  "enabled": 0,
+  "modified": "2024-08-05 19:58:01.776576",
+  "module": null,
+  "name": "Create Sales Invoice",
+  "script": "frappe.ui.form.on('Subscription', {\n    refresh: function(frm) {\n        frm.add_custom_button(__('Generate Payment'), () => {\n            let d = new frappe.ui.Dialog({\n                title: 'Create New Sales Invoice',\n                fields: [\n                    {\n                        label: 'Posting Date',\n                        fieldname: 'posting_date',\n                        fieldtype: 'Date',\n                        default: frappe.datetime.get_today()\n                    },\n                    {\n                        label: 'table',\n                        fieldname: 'table',\n                        fieldtype: 'HTML',\n                        options: `\n                        <table class=\"table\">\n                        <thead>\n                        <tr>\n                        <th>Subscription</th>\n                        <th>Package</th>\n                        <th>Amount</th>\n                        <th>Mode Of Payment</th>\n                        </tr>\n                        </thead>\n                        </table>\n                        `\n                    },\n                ],\n                primary_action_label: 'Save',\n                primary_action(values) {\n                    let items = []\n                    let all_rows = $(d.$wrapper.find(\".table .item-row\"));\n                    all_rows.each(function(e) {\n                        let row = $(this);\n                        let item_code = row.find('.item-code').attr(\"id\");\n                        let item_name = row.find('.item-name').text();\n                        let amount = row.find('.amount').text();\n                        let mode_of_payment = row.find('.mode-of-payment').val();\n                        items.push({\n                            item_code,\n                            item_name,\n                            amount,\n                            mode_of_payment\n                        });\n                    });\n                    frappe.call({\n                        method: 'trie_crm.triecrm_functions.create_sales_invoice',\n                        args: {\n                            subscription: frm.doc.name,\n                            customer: frm.doc.party,\n                            items: items,\n                            posting_date: values.posting_date\n                        },\n                        callback: function(r) {\n                            if (r.message) {\n                                \n                            }\n                            d.hide();\n                        }\n                    });\n                }\n            });\n            frm.doc.plans.forEach(plan => {\n                frappe.db.get_doc('Subscription Plan', plan.plan).then(plan_doc => {\n                    d.$wrapper.find(\".table\").append(`\n                        <tr class=\"item-row\">\n                            <td>${frm.doc.name}</td>\n                            <td class=\"item-name\">${plan_doc.item}</td>\n                            <td class=\"amount\">${plan_doc.cost}</td>\n                            <td>\n                                <select class=\"mode-of-payment\">\n                                    <option value=\"Cash\">Cash</option>\n                                    <option value=\"Credit Card\">Credit Card</option>\n                                </select>\n                            </td>\n                        </tr>\n                    `);\n                });\n            });\n            d.show();\n        });\n    }\n});",
+  "view": "Form"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Client Script",
+  "dt": "Subscription",
+  "enabled": 0,
+  "modified": "2024-08-21 19:43:04.455290",
+  "module": null,
+  "name": "Field Validation",
+  "script": "frappe.ui.form.on('Subscription', {\n    after_save: function(frm) {\n        if (frm.doc.custom_subscription_day_and_time.length === 0 && frm.doc.custom_vehicle_service.length === 0) {\n            frappe.call({\n                method: 'trie_crm.triecrm_functions.update_subscription_plan',\n                args: {\n                    subscription_name: frm.doc.name\n                },\n                callback: function(r) {\n                    if (r.message) {\n                        // updatePlans(frm, r.message.plans);\n                        frm.reload_doc();\n                    }\n                }\n            });\n        }\n    },\n    before_save: function(frm) {\n        if (frm.is_new()) {\n            frm.set_value('status','Unpaid')\n            console.log(frm.doc.status)\n            \n            frm.refresh_field('status');\n            let startDate = frappe.datetime.str_to_obj(frm.doc.start_date);\n            let endDate = new Date(startDate.getFullYear() + 5, startDate.getMonth(), startDate.getDate());\n            frm.set_value('end_date', frappe.datetime.obj_to_str(endDate));\n            frm.set_value('custom_subscription_channel', \"Walk-In\");\n            frm.set_value(\"custom_remaining_pause_days\" ,\"60\");\n        }\n    }\n});\n",
+  "view": "Form"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Client Script",
+  "dt": "Subscription",
+  "enabled": 0,
+  "modified": "2024-07-31 12:21:51.493189",
+  "module": "Trie CRM",
+  "name": "update_subscription_plan",
+  "script": "frappe.ui.form.on('Subscription', {\n    before_save: function(frm) {\n        if (frm.is_new()) {\n            console.log(\"if\")\n            frm.doc.status = 'Unpaid';\n            frm.refresh_field('status');\n            let startDate = frappe.datetime.str_to_obj(frm.doc.start_date);\n            let endDate = new Date(startDate.getFullYear() + 5, startDate.getMonth(), startDate.getDate());\n            frm.set_value('end_date', frappe.datetime.obj_to_str(endDate));\n            frm.set_value('custom_subscription_channel', \"Walk-In\");\n        }\n    }\n});\n",
+  "view": "Form"
+ }
+]

@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Payment Failed</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+        }
+
+        body {
+            background: #f5f5f5;
+        }
+
+        .header {
+            background: #00BFA5;
+            color: white;
+            padding: 16px;
+            position: relative;
+            text-align: center;
+        }
+
+        .back-button {
+            position: absolute;
+            left: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: white;
+            text-decoration: none;
+            font-size: 24px;
+        }
+
+        .container {
+            max-width: 100%;
+            margin: 0 auto;
+            padding: 24px;
+            text-align: center;
+        }
+
+        /* Updated failed circle styling */
+        .failed-circle-container {
+            width: 200px;
+            height: 200px;
+            margin: 32px auto;
+            position: relative;
+        }
+
+        .failed-circle-outer {
+            position: absolute;
+            width: 200px;
+            height: 200px;
+            border-radius: 50%;
+            background: rgba(231, 76, 60, 0.1);
+        }
+
+        .failed-circle-middle {
+            position: absolute;
+            width: 160px;
+            height: 160px;
+            top: 20px;
+            left: 20px;
+            border-radius: 50%;
+            background: rgba(231, 76, 60, 0.15);
+        }
+
+        .failed-circle-inner {
+            position: absolute;
+            width: 120px;
+            height: 120px;
+            top: 40px;
+            left: 40px;
+            border-radius: 50%;
+            background: rgba(231, 76, 60, 0.2);
+        }
+
+        .failed-icon {
+            position: absolute;
+            width: 80px;
+            height: 80px;
+            top: 60px;
+            left: 60px;
+            background: #e74c3c;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .failed-icon svg {
+            width: 40px;
+            height: 40px;
+            stroke: white;
+            stroke-width: 2;
+        }
+
+        .title {
+            font-size: 20px;
+            color: #333;
+            margin: 16px 0;
+            font-weight: 500;
+        }
+
+        .message {
+            color: #666;
+            margin: 16px 0;
+            line-height: 1.5;
+            font-size: 14px;
+        }
+
+        .retry-button {
+            background: #00BFA5;
+            color: white;
+            border: none;
+            padding: 16px 32px;
+            border-radius: 24px;
+            font-size: 16px;
+            margin-top: 24px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            font-weight: 500;
+        }
+
+        .retry-button:hover {
+            background: #00A693;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <a href="/" class="back-button">←</a>
+        <h1>Card Change Request</h1>
+    </div>
+
+    <div class="container">
+        <!-- Updated failed circle structure -->
+        <div class="failed-circle-container">
+            <div class="failed-circle-outer"></div>
+            <div class="failed-circle-middle"></div>
+            <div class="failed-circle-inner"></div>
+            <div class="failed-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="18" y1="6" x2="6" y2="18"></line>
+                    <line x1="6" y1="6" x2="18" y2="18"></line>
+                </svg>
+            </div>
+        </div>
+
+        <h2 class="title">Payment Failed</h2>
+        <p class="message">We couldn't process your payment.<br>Please try again or use a different payment method.</p>
+
+        <!-- <button onclick="retryPayment()" class="retry-button">Try Again</button> -->
+    </div>
+
+    <script>
+        function retryPayment() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const orderId = urlParams.get('order_number');
+            
+            // Call your payment retry endpoint
+            // frappe.call({
+            //     method: 'your_app.your_app.payment.retry_payment',
+            //     args: {
+            //         'order_number': orderId
+            //     },
+            //     callback: function(r) {
+            //         if (r.message && r.message.url) {
+            //             window.location.href = r.message.url;
+            //         }
+            //     }
+            // });
+        }
+    </script>
+</body>
+</html>

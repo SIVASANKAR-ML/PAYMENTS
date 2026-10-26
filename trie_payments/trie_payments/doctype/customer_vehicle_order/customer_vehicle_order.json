@@ -1,0 +1,111 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "autoname": "field:order_id",
+ "creation": "2024-08-11 10:44:48.336509",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "order_details_section",
+  "order_id",
+  "vehicle_initial_location_details_section",
+  "site_location",
+  "section_break_dvye",
+  "car_registration_number",
+  "car_type",
+  "car_color",
+  "column_break_owvq",
+  "car_brand_and_model",
+  "car_brand",
+  "car_model"
+ ],
+ "fields": [
+  {
+   "fieldname": "order_details_section",
+   "fieldtype": "Section Break",
+   "label": "Order Details"
+  },
+  {
+   "fieldname": "order_id",
+   "fieldtype": "Data",
+   "label": "Order Id",
+   "unique": 1
+  },
+  {
+   "fieldname": "vehicle_initial_location_details_section",
+   "fieldtype": "Section Break",
+   "label": "Vehicle Initial Location Details"
+  },
+  {
+   "fieldname": "site_location",
+   "fieldtype": "Link",
+   "label": "Site Location",
+   "options": "Branch"
+  },
+  {
+   "fieldname": "section_break_dvye",
+   "fieldtype": "Section Break",
+   "label": "Vehicle Details"
+  },
+  {
+   "fieldname": "car_registration_number",
+   "fieldtype": "Data",
+   "label": "Car Registration Number"
+  },
+  {
+   "fieldname": "car_brand_and_model",
+   "fieldtype": "Data",
+   "label": "Car Brand And Model"
+  },
+  {
+   "fieldname": "car_color",
+   "fieldtype": "Data",
+   "label": "Car Color"
+  },
+  {
+   "fieldname": "column_break_owvq",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "car_type",
+   "fieldtype": "Link",
+   "label": "Car Type",
+   "options": "Car Type"
+  },
+  {
+   "fieldname": "car_brand",
+   "fieldtype": "Data",
+   "label": "Car Brand"
+  },
+  {
+   "fieldname": "car_model",
+   "fieldtype": "Data",
+   "label": "Car Model"
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "links": [],
+ "modified": "2024-08-12 14:04:47.249245",
+ "modified_by": "Administrator",
+ "module": "Trie Payments",
+ "name": "Customer Vehicle Order",
+ "naming_rule": "By fieldname",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": []
+}
